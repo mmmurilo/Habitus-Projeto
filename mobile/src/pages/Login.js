@@ -50,7 +50,8 @@ export default function Login( { navigation }){
                     autoCapitalize="none"    
                     autoCorrect={false} 
                     value={email}     
-                    onChangeText={setEmail}                                
+                    onChangeText={setEmail}     
+                    titulo="email_usuario"                           
                     
                     />
 
@@ -60,7 +61,8 @@ export default function Login( { navigation }){
                     secureTextEntry={true} 
                     placeholder="Sua senha"
                     placeholderTextColor= "#999"
-                    autoCorrect={false}    
+                    autoCorrect={false}   
+                    titulo="senha_usuario" 
                     //value={senha}     
                     //onChangeText={setSenha}  
                                                 

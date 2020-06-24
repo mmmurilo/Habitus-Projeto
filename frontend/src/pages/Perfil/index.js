@@ -1,25 +1,43 @@
-import React, { useState, useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import api from '../../services/api';
 
-
 export default function Perfil({ history }){
-    const [titulo, setTitulo] = useState('');
- 
-
-    async function handleSubmit(event){
-        event.preventDefault();
-
-        const response = await api.post('sessions', { titulo })
-
-        const { _id } = response.data;
+    const [titulo_perfil, setTitulo] = useState('');
+    const [conteudos, setConteudos] = useState(['']);
+    const [conteudoA,setConteudoA] = useState(['']);
+    const [conteudoB,setConteudoB] = useState(['']);
+    const [conteudoC,setConteudoC] = useState(['']);
+    const [conteudoD,setConteudoD] = useState(['']);
+    const [conteudoE,setConteudoE] = useState(['']);
+    const [perfil] = useState(['']);
     
-        localStorage.setItem('user', _id);
+    useEffect(() => {
+        api.get(`conteudos`).then(resp => {
+            setConteudos(resp.data);
+        })
+    }, []);
 
-        history.push('/inicial');
+    async function cadastrarPerfil(event){
+      event.preventDefault();
 
-  }
+      const perfil = {titulo_perfil: titulo_perfil, conteudoA: conteudoA,
+                conteudoB: conteudoB, conteudoC: conteudoC, conteudoD: conteudoD, conteudoE: conteudoE}
+      api.post(`perfil`,perfil).then(resp => {
+          return resp.data;
+      }).catch(console.log(`Error: ${console.error}`));
 
+      history.push('/inicial');
+    }
 
+    async function cancelar(event){
+      event.preventDefault();
+
+      history.push('/inicial');
+    }
+  
+    async function handleSubmit(event){
+
+    }
 
     return (
         <>
@@ -28,28 +46,48 @@ export default function Perfil({ history }){
         </p>
       
         <form onSubmit = {handleSubmit}> 
-            <label htmlFor="titulo">TÍTULO*</label>
+            <label htmlFor="titulo_perfil">TÍTULO*</label>
             <input 
-            id="titulo" 
-            type="titulo" 
+            id="titulo_perfil" 
+            type="titulo_perfil" 
             placeholder=""
-            value = {titulo}
+            value = {titulo_perfil}
             onChange={ event => setTitulo(event.target.value) }
             />
-          <button className="btn" type="submit">Salvar</button>    
-          <button className="btn" type="submit">Cancelar</button>   
 
-        
+            <label htmlFor="conteudos">Selecione 5 (cinco) Conteúdos:</label>
+            <select id="conteudoA" value={conteudoA} onChange={event => setConteudoA(event.target.value)}>
+                <option value = '0'>Selecione um Conteúdo</option>
+                {conteudos.map(conteudo => 
+                    (<option value={conteudo.id}>{conteudo.nome_conteudo}</option>))}
+            </select>
+            <select id="conteudoB" value={conteudoB} onChange={event => setConteudoB(event.target.value)}>
+                <option value = '0'>Selecione um Conteúdo</option>
+                {conteudos.map(conteudo => 
+                    (<option value={conteudo.id}>{conteudo.nome_conteudo}</option>))}
+            </select>
+            <select id="conteudoC" value={conteudoC} onChange={event => setConteudoC(event.target.value)}>
+                <option value = '0'>Selecione um Conteúdo</option>
+                {conteudos.map(conteudo => 
+                    (<option value={conteudo.id}>{conteudo.nome_conteudo}</option>))}
+            </select>
+            <select id="conteudoD" value={conteudoD} onChange={event => setConteudoD(event.target.value)}>
+                <option value = '0'>Selecione um Conteúdo</option>
+                {conteudos.map(conteudo => 
+                    (<option value={conteudo.id}>{conteudo.nome_conteudo}</option>))}
+            </select>
+            <select id="conteudoE" value={conteudoE} onChange={event => setConteudoE(event.target.value)}>
+                <option value = '0'>Selecione um Conteúdo</option>
+                {conteudos.map(conteudo => 
+                    (<option value={conteudo.id}>{conteudo.nome_conteudo}</option>))}
+            </select>
+            
+          <button className="btn" onClick={cadastrarPerfil}>Salvar</button>    
+          <button className="btn" onClick={cancelar}>Cancelar</button>   
+
         </form>
-
-       
-       
         </>
 
         )
-
-
-
-
 
 }

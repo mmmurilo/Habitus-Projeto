@@ -3,12 +3,10 @@ import { View, AsyncStorage, KeyboardAvoidingView, Platform, Image, Text, TextIn
 
 import api from '../../services/api';
 
-import usuario from '../../assets/usuario.jpg';
 
 
-export default function CadastroAvaliador( { navigation }){
 
-    const [senha_usuario, setSenha_usuario] = useState('');
+export default function ListarFatoAvaliado( { navigation }){
 
     async function handleSubmit(){
         
@@ -24,25 +22,17 @@ export default function CadastroAvaliador( { navigation }){
 
     return(
         <View style={styles.container}>
-            <Text style={styles.label}>CADASTRO</Text>
+            <Text style={styles.label}>LISTAR FATO</Text>
 
-
-            <View style={styles.container}>
-                <Image source={usuario} />          
-            </View>
-            <Text style={styles.label}>Nome Completo</Text>
-            <Text style={styles.label}>E-mail</Text>
             <View style={styles.form}>
                 
-
-                <Text style={styles.label}>Senha *</Text>
+                <Text style={styles.label}>Selecione o fato observado </Text>
                 <TextInput
                     style={styles.Input}
                     secureTextEntry={true} 
-                    placeholder="Sua senha"
+                    placeholder="Fato 01"
                     placeholderTextColor= "#999"
-                    autoCorrect={false}   
-                    titulo="senha_usuario" 
+                    autoCorrect={false}    
                     //value={senha}     
                     //onChangeText={setSenha}  
                                       
@@ -51,7 +41,7 @@ export default function CadastroAvaliador( { navigation }){
                     />    
 
                 <TouchableOpacity onPress={handleSubmit} style={styles.button}>
-                    <Text style={styles.buttonText}>Salvar</Text>
+                    <Text style={styles.buttonText}>Alterar</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={handleSubmit} style={styles.button}>
                     <Text style={styles.buttonText}>Cancelar</Text>
@@ -75,14 +65,14 @@ const styles = StyleSheet.create({
     form: {
         alignSelf: 'stretch',
         paddingHorizontal: 30,
-        marginTop: 20,
+        marginTop: 50,
     },
 
     label: {
         fontWeight: 'bold',
         color: '#444',
-        marginBottom: 10,
-        marginTop: 40
+        marginBottom: 8,
+        marginTop: 30
     },
 
     input: {

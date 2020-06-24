@@ -1,27 +1,49 @@
-import React, { useState, useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import api from '../../services/api';
 import { Link } from 'react-router-dom';
 
+import './styles.css';
+
 export default function Curso({ history }){
-    const [titulo, setTitulo] = useState('');
-    const [inicio, setInicio] = useState('');
-    const [final, setFinal] = useState('');
-    
+    const [titulo_curso, setTitulo] = useState('');
+    const [data_inicio_curso, setInicio] = useState('');
+    const [data_fim_curso, setFinal] = useState('');
+    const [perfil_id, setPerfil_curso] = useState('');
+    const [listaPerfil,setListaPerfil] = useState(['']);
+
+    useEffect(() => {
+      api.get(`perfil`).then(resp => {
+          setListaPerfil(resp.data);
+      })
+    }, []);  
+
+    async function cadastrarCurso(event){
+      event.preventDefault();
+
+      const curso = { titulo_curso: titulo_curso,
+        data_inicio_curso: data_inicio_curso, 
+        data_fim_curso: data_fim_curso, 
+        perfil_id }
+
+      api.post(`perfil/${perfil_id}/cursos`,curso).then(resp => {
+          return resp.data;
+      }).catch(console.log(`Error: ${console.error}`));
+
+      history.push('/inicial');
+    }
+
+    async function cancelar(event){
+      event.preventDefault();
+
+      history.push('/inicial');
+    }
 
     async function handleSubmit(event){
         event.preventDefault();
 
-        const response = await api.post('sessions', { titulo })
-
-        const { _id } = response.data;
-    
-        localStorage.setItem('user', _id);
 
         history.push('/inicial');
-
   }
-
-
 
     return (
         <>
@@ -30,58 +52,55 @@ export default function Curso({ history }){
         </p>
       
       <form onSubmit = {handleSubmit}> 
-        <label htmlFor="titulo">Título*</label>
+        <label htmlFor="titulo_curso">Título*</label>
         <input 
-          id="titulo" 
-          type="titulo" 
+          id="titulo_curso" 
+          type="titulo_curso" 
           placeholder=""
-          value = {titulo}
+          value = {titulo_curso}
           onChange={ event => setTitulo(event.target.value) }
         />
 
       <form onSubmit = {handleSubmit}> 
-        <label htmlFor="inicio ">Data de Inicio*</label>
+        <label htmlFor="data_inicio_curso ">Data de Inicio*</label>
         <input 
-          id="inicio" 
-          type="inicio" 
+          id="data_inicio_curso" 
+          type="date" 
           placeholder=""
-          value = {inicio}
+          value = {data_inicio_curso}
           onChange={ event => setInicio(event.target.value) }
         />
 
       </form>
 
       <form onSubmit = {handleSubmit}> 
-        <label htmlFor="final">Data Final*</label>
+        <label htmlFor="data_fim_curso">Data Final*</label>
         <input 
-          id="final" 
-          type="final" 
+          id="data_fim_curso" 
+          type="date" 
           placeholder=""
-          value = {final}
+          value = {data_fim_curso}
           onChange={ event => setFinal(event.target.value) }
         />
 
       </form>
 
-      <Link to="/cadastroavaliados">
-         <button className="btn" type="submit">Cadastrar Avaliados</button>                       
-      </Link>
+      <form onSubmit = {handleSubmit}> 
+        <label htmlFor="perfil_curso">Selecione o Perfil*</label>
+            <select id="perfil_curso" value={perfil_id} onChange={event => setPerfil_curso(event.target.value)}>
+                <option value = '0'>Selecione um Perfil</option>
+                {listaPerfil.map(perfil => 
+                    (<option value={perfil.id}>{perfil.titulo_perfil}</option>))}
+            </select>
 
-      <Link to="/cadastroavaliadores">
-            <button className="btn" type="submit">Cadastrar Avaliadores</button>
-      </Link>
-     
-       <button className="btn" type="submit">Cancelar</button>
-       <button className="btn" type="submit">Salvar</button>
-      
+      </form> 
 
       </form>
+     
+      <button className="btn" onClick={cadastrarCurso}>Salvar</button>    
+      <button className="btn" onClick={cancelar}>Cancelar</button>
       
       </>
     )
 }
-        
-        
-        
     
- 

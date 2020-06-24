@@ -19,17 +19,7 @@ export default function Inicial(){
     }, []);
     return (
     <>
-        <ul className="spot-list">
-            {spots.map(spot => (
-                <li key={spot._id}>
-                    <header style={{ backgroundImage: `url(${spot.thumbnail_url})` }} />
-                    <strong>{spot.company}</strong>
-                    <span>{spot.price ? `R${spot.price }/dia` : 'GRATUITO'}</span>
-                </li>
-            ))}
-
-        </ul>
-        
+       
         <ul className="botao">
 
             <Link to="/conteudo">
@@ -42,6 +32,10 @@ export default function Inicial(){
 
             <Link to="/curso">
                 <button className="btn">Cadastrar Curso</button>
+            </Link>
+
+            <Link to="/cadastrousuarios">
+                <button className="btn" type="submit">Cadastrar Usuarios</button>                       
             </Link>
             
             <Link to="/relatorio">

@@ -1,5 +1,6 @@
 const Perfil = require('../models/Perfil');
 const Curso = require('../models/Curso');
+const { default: Conteudo } = require('../../../frontend/src/pages/Conteudo');
 
 module.exports = {
     async index(req,res){
@@ -9,8 +10,7 @@ module.exports = {
     },
     
     async store(req,res){
-        const {curso_id} = req.params;
-        const {titulo_perfil} = req.body;
+        const {titulo_perfil,lista_conteudos} = req.body;
 
         const curso = await Curso.findByPk(curso_id);
 
@@ -21,6 +21,7 @@ module.exports = {
         const [perfil] = await Perfil.findOrCreate({
             where: {titulo_perfil}
         });
+
     
         return res.json(perfil);
     }

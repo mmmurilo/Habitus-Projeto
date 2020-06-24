@@ -1,17 +1,18 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import api from '../../services/api';
 
 
 export default function FichaAvaliacao({ history }){
-    const [dinicio, setTitulo] = useState('');
     const [inicio, setInicio] = useState('');
     const [final, setFinal] = useState('');
+    const [avaliados, setAvaliados] = useState('');
+    
     
 
     async function handleSubmit(event){
         event.preventDefault();
 
-        const response = await api.post('sessions', { dinicio })
+        const response = await api.post('sessions', { inicio })
 
         const { _id } = response.data;
     
@@ -43,7 +44,7 @@ export default function FichaAvaliacao({ history }){
         <label htmlFor="inicio ">Data de Inicio*</label>
         <input 
           id="inicio" 
-          type="inicio" 
+          type="date" 
           placeholder=""
           value = {inicio}
           onChange={ event => setInicio(event.target.value) }
@@ -55,9 +56,21 @@ export default function FichaAvaliacao({ history }){
         <label htmlFor="final">Data Final*</label>
         <input 
           id="final" 
-          type="final" 
+          type="date" 
           placeholder=""
           value = {final}
+          onChange={ event => setFinal(event.target.value) }
+        />
+
+      </form>
+
+      <form onSubmit = {handleSubmit}> 
+        <label htmlFor="final">Avaliados:</label>
+        <input 
+          id="avaliados" 
+          type="avaliados" 
+          placeholder="Selecione os avaliados"
+          value = {avaliados}
           onChange={ event => setFinal(event.target.value) }
         />
 

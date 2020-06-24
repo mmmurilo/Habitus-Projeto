@@ -6,9 +6,7 @@ import api from '../../services/api';
 import usuario from '../../assets/usuario.jpg';
 
 
-export default function CadastroAvaliador( { navigation }){
-
-    const [senha_usuario, setSenha_usuario] = useState('');
+export default function CadastroAvaliadoF( { navigation }){
 
     async function handleSubmit(){
         
@@ -41,8 +39,7 @@ export default function CadastroAvaliador( { navigation }){
                     secureTextEntry={true} 
                     placeholder="Sua senha"
                     placeholderTextColor= "#999"
-                    autoCorrect={false}   
-                    titulo="senha_usuario" 
+                    autoCorrect={false}    
                     //value={senha}     
                     //onChangeText={setSenha}  
                                       
