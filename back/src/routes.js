@@ -4,6 +4,7 @@ const UsuarioAvaliadoController = require('./controllers/UsuarioAvaliadoControll
 const UsuarioAvaliadorController = require('./controllers/UsuarioAvaliadorController');
 const PerfilController = require('./controllers/PerfilController');
 const ConteudoController = require('./controllers/ConteudoController');
+const ConteudoNomeController = require('./controllers/ConteudoNomeController');
 const ConteudoPerfilController = require('./controllers/ConteudoPerfilController');
 const PautaController = require('./controllers/PautaController');
 const CursoController = require('./controllers/CursoController');
@@ -30,6 +31,7 @@ routes.get('/perfil',PerfilController.index); //busca todos os perfils
 routes.post('/perfil',PerfilController.store); //cria um perfil
 
 routes.get('/conteudos',ConteudoController.index); //quando quiser buscar todos conteudos
+routes.get('/conteudo/:nome_conteudo',ConteudoNomeController.index);
 routes.post('/conteudos',ConteudoController.store); //a principio deletar
 
 routes.get('/conteudos/:conteudo_id/pautas',PautaController.index); //busca todas as pautas de um conteudo
@@ -44,15 +46,15 @@ routes.get('/perfil/:perfil_id/cursos',CursoPerfilController.index); //busca o c
 routes.post('/perfil/:perfil_id/cursos',CursoController.store); //cria curso com perfil
 
 
-routes.get('/curso/:curso_id/avaliado',AvaliadoController.index); //busca todos avaliados no curso
-routes.post('/curso/:curso_id/avaliado',AvaliadoController.store); //cria avaliado no curso (e no banco, se nao existir) 
-routes.delete('/curso/:curso_id/avaliado',AvaliadoController.delete); //deleta avaliado do curso (nao do banco)
+routes.get('/curso/avaliado/:curso_id',AvaliadoController.index); //busca todos avaliados no curso
+routes.post('/curso/avaliado/:curso_id',AvaliadoController.store); //cria avaliado no curso (e no banco, se nao existir) 
+routes.delete('/curso/avaliado/:curso_id',AvaliadoController.delete); //deleta avaliado do curso (nao do banco)
 routes.get('/curso/avaliado/:curso_id/:usuario_id',IdAvaliadoController.index); //id do avaliado pelo id usuario e curso
 
 //verificar porque /curso/:curso_id/avaliador não funciona (saturação?)
-routes.get('/:curso_id/avaliador',AvaliadorController.index); //busca todos avaliadores no curso
-routes.post('/curso/:curso_id/avaliador',AvaliadorController.store); //cria avaliador no curso (e no banco, se nao existir) 
-routes.delete('/curso/:curso_id/avaliador',AvaliadorController.delete); //deleta avaliador do curso (nao do banco)
+routes.get('/avaliador/:curso_id',AvaliadorController.index); //busca todos avaliadores no curso
+routes.post('/avaliador/:curso_id',AvaliadorController.store); //cria avaliador no curso (e no banco, se nao existir) 
+routes.delete('/avaliador/:curso_id',AvaliadorController.delete); //deleta avaliador do curso (nao do banco)
 routes.get('/curso/avaliador/:curso_id/:usuario_id',IdAvaliadorController.index); //id do avaliador pelo id usuario e curso
 
 routes.get('/curso/:curso_id/coordenador',CoordenadorController.index); //busca todos coordenadores no curso

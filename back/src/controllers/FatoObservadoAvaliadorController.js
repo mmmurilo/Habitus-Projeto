@@ -44,10 +44,11 @@ module.exports = {
     
     async store(req,res){
         const {avaliador_id} = req.params;
-        const {data_fato, tipo_fato,nome_conteudo, desc_pauta,desc_fato,
-        desc_atividade,desc_providencia,listaAvaliados} = req.body;
-
-        const avaliador = await Avaliador.findByPk(avaliador_id);
+        const {data_fato, tipo_fato,nome_conteudo,desc_pauta,desc_fato,
+        desc_atividade,desc_providencia,avaliado_id} = req.body;
+        //listaAvaliados} = req.body;
+    
+        const avaliador = await Avaliador.findOne({where: {id: avaliador_id}});
 
         if(!avaliador){
             return res.status(400).json({error:'Avaliador não encontrado'});
@@ -89,7 +90,10 @@ module.exports = {
             atividade_id: atividade.id,
             providencia_id: providencia.id,
         });
-                
+
+        const avaliado = await Avaliado.findByPk(avaliado_id);
+        fatoObservado.addAvaliado(avaliado);
+        /*
         listaAvaliados.forEach(addAvaliado);
         
         async function addAvaliado(nome_avaliado){
@@ -102,6 +106,7 @@ module.exports = {
             console.log(avaliado.id)
             fatoObservado.addAvaliado(avaliado);
         };      
+        */
 
         return res.json(fatoObservado);
     },

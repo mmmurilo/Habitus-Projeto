@@ -9,22 +9,12 @@ module.exports = {
     },
     
     async store(req,res){
-        const {perfil_id} = req.params;
         const {nome_conteudo} = req.body;
 
-        const perfil = await Perfil.findByPk(perfil_id);
+        const conteudo = await Conteudo.create({nome_conteudo});
 
-        if(!perfil){
-            return res.status(400).json({error:'Perfil não encontrado'});
-        }
-
-        const [ conteudo ] = await Conteudo.findOrCreate({
-            where: { nome_conteudo }
-        });
-
-        await perfil.addConteudo(conteudo);
-    
         return res.json(conteudo);
+        
     },
 
     async delete(req,res){
