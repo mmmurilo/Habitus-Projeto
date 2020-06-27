@@ -29,13 +29,13 @@ function MyDrawer() {
       
       <Drawer.Screen name="Home" component={HomeAvaliador} />
       <Drawer.Screen name="Login" component={Login} />
-      <Drawer.Screen name="Cadastro" component={CadastroAvaliador} />
+     {/*} <Drawer.Screen name="Cadastro" component={CadastroAvaliador} /> */}
       <Drawer.Screen name="Cadastrar Fato Observado" component={CadastrarFatoObservado} />
       <Drawer.Screen name="Listar Fatos Observados" component={ListarFato} />
 
-      <Drawer.Screen name="Cadastro Avaliado" component={CadastroAvaliado} />
+     {/*} <Drawer.Screen name="Cadastro Avaliado" component={CadastroAvaliado} />
       <Drawer.Screen name="Ficha de Avaliação" component={FichaAvaliacao} />
-      <Drawer.Screen name="Listar Fatos Observados Avaliado" component={ListarFatoAvaliado} />
+      <Drawer.Screen name="Listar Fatos Observados Avaliado" component={ListarFatoAvaliado} />*/}
 
       </Drawer.Navigator>
     </NavigationContainer>

@@ -12,6 +12,7 @@ export default function Conteudo({ history }){
     const [id,setID] = useState('');
     const [conteudos, setConteudos] = useState(['']);
     
+    
     useEffect(() => {
         if(!localStorage.getItem('usuario')){
             history.push('');
@@ -71,7 +72,18 @@ export default function Conteudo({ history }){
 
         history.push('/inicial');
     }
-    
+    /*
+    async function popular(conteudo_id){
+        const pautas = api.get(`conteudos/${conteudo_id}/pautas`).then(resp => {
+            console.log(resp.data);
+        })
+        console.log(pautas);
+        
+        //const texto = pautas.pautas.map(pauta => (pauta.desc_pauta));
+
+        //alert(texto);
+    }*/
+
     return (
         <>
         <p>
@@ -80,21 +92,20 @@ export default function Conteudo({ history }){
         {/*
             <form onSubmit = {handleSubmit}> 
             <label>Selecionar Conteúdo já cadastrado:</label>
-            <select id="listaConteudos" onChange={event => setConteudoExistente(event.target.value)}>
+            <select id="listaConteudos" onChange={event => popular(event.target.value)}>
                 <option value = '0'>Selecione um Conteúdo</option>
                 {conteudos.map(conteudo => (<option key={conteudo.id} value={conteudo.id}>
                     {conteudo.nome_conteudo}</option>))}
             </select> 
+         
             <label>Pautas Existentes:</label>
-                <label>{conteudoExistente}</label>
-                <h>{conteudoExistente}</h>
-            <select id="listaConteudos" onChange={event => setConteudoExistente(event.target.value)}>
+            <select id="listaPautas">
                 <option value = '0'>Pautas Relacionadas</option>
-                {conteudos.map(conteudo => (<option key={conteudo.id} value={conteudo.id}>
-                    {conteudo.nome_conteudo}</option>))}
-            </select>         
-        </form>
-        */}
+                {pautas.map(pauta => (<option key={pauta.id} value={pauta.id}>
+                    {pauta.desc_pauta}</option>))}
+                </select>
+        </form>*/}
+        
         <form onSubmit = {handleSubmit}>
             <label>Novo Conteúdo</label>
             <input 
