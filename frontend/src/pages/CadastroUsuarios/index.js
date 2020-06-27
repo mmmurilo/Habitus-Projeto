@@ -15,6 +15,9 @@ export default function New({ history }){
     const [listaCurso,setListaCurso] = useState(['']);
 
     useEffect(() => {
+        if(!localStorage.getItem('usuario')){
+            history.push('');
+        }
       api.get(`cursos`).then(resp => {
           setListaCurso(resp.data);
       })
@@ -68,20 +71,6 @@ export default function New({ history }){
 
     async function handleSubmit(event) {
        event.preventDefault();
-        /*
-       const data = new FormData();
-       const user_id = localStorage.getItem('user');
-
-       data.append('thumbnail', thumbnail);
-       data.append('nome_usuario', nome_usuario);
-       data.append('email_usuario', email_usuario);
-       data.append('senha_usuario', senha_usuario);
-
-
-       await api.post('/spots', data, {
-           headers: { user_id }
-       })
-       */
 
        history.push('/inicial');
     }

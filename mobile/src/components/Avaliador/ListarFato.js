@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, AsyncStorage, KeyboardAvoidingView, Platform, Image, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, AsyncStorage, KeyboardAvoidingView, Platform, Image, FlatList, Picker, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 
 import api from '../../services/api';
 
@@ -7,6 +7,20 @@ import api from '../../services/api';
 
 
 export default function ListarFato( { navigation }){
+
+    const [avaliador_id,setAvaliador] = useState('');
+    const [nome_avaliador,setNome] = useState('');
+    const [fatos, setFatos] = useState(['']);
+    const [avaliados,setAvaliados] = useState(['']);
+    const [texto, setTexto] = useState(['']);
+
+    async function exibir(event){
+        event.preventDefault();
+        api.get(`/curso/${avaliador_id}/avaliador/fo`).then(resp => {
+            setFatos(resp.data);
+        }).catch(console.log(`Error: ${console.error}`));   
+        
+    }
 
     async function handleSubmit(){
         
@@ -26,27 +40,33 @@ export default function ListarFato( { navigation }){
 
             <View style={styles.form}>
                 
-                <Text style={styles.label}>Selecione o fato observado </Text>
+                <Text style={styles.label}>Selecione o Avaliador</Text>
                 <TextInput
                     style={styles.Input}
-                    secureTextEntry={true} 
-                    placeholder="Fato 01"
+                    placeholder="Avaliador"
                     placeholderTextColor= "#999"
-                    autoCorrect={false}    
-                    //value={senha}     
-                    //onChangeText={setSenha}  
-                                      
+                    autoCorrect={false}
+                    type="number"
+                    keyboardType='numeric'
+                    defaultValue= {avaliador_id}
+                    onChangeText= {avaliador_id => setAvaliador(avaliador_id)}     
+                    /> 
 
-                    
-                    />    
+<View>
+            {fatos.map(fato => <Text>{'\nData: '}{fato.data_fato} {'Tipo: '}{fato.tipo_fato}{'\n'}
+            {'Conteúdo Atitudinal: '} {fato.conteudoFato.nome_conteudo} {'\nPauta: '} {fato.pautaFato.desc_pauta}
+            {'\nFato: '} {fato.fatoFato.desc_fato} {'\nAtividade: '} {fato.atividadeFato.desc_atividade}
+            {'\nProvidência: '} {fato.providenciaFato.desc_providencia} {'\nAlunos: '}
+            {(fato.avaliados).map(usuario => <Text>{usuario.usuarioAvaliado.nome_usuario}{'\n'}</Text>)}
+            </Text>)}
+    </View> 
 
-                <TouchableOpacity onPress={handleSubmit} style={styles.button}>
-                    <Text style={styles.buttonText}>Alterar</Text>
+                <TouchableOpacity onPress={exibir} style={styles.button}>
+                    <Text style={styles.buttonText}>Exibir</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={handleSubmit} style={styles.button}>
                     <Text style={styles.buttonText}>Cancelar</Text>
-                </TouchableOpacity>
-                
+                </TouchableOpacity>               
                 
             </View>
         </View>

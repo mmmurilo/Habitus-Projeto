@@ -12,6 +12,9 @@ export default function Perfil({ history }){
     const [perfil] = useState(['']);
     
     useEffect(() => {
+        if(!localStorage.getItem('usuario')){
+            history.push('');
+        }
         api.get(`conteudos`).then(resp => {
             setConteudos(resp.data);
         })
@@ -44,7 +47,6 @@ export default function Perfil({ history }){
         <p>
           <strong>Cadastrar Perfil Profissiográfico</strong>
         </p>
-      
         <form onSubmit = {handleSubmit}> 
             <label htmlFor="titulo_perfil">TÍTULO*</label>
             <input 
@@ -54,9 +56,8 @@ export default function Perfil({ history }){
             value = {titulo_perfil}
             onChange={ event => setTitulo(event.target.value) }
             />
-
             <label htmlFor="conteudos">Selecione 5 (cinco) Conteúdos:</label>
-            <select id="conteudoA" value={conteudoA} onChange={event => setConteudoA(event.target.value)}>
+            <select id="conteudoA" value={conteudoA} onChange={event => {setConteudoA(event.target.value)}}>
                 <option value = '0'>Selecione um Conteúdo</option>
                 {conteudos.map(conteudo => 
                     (<option value={conteudo.id}>{conteudo.nome_conteudo}</option>))}
@@ -81,13 +82,9 @@ export default function Perfil({ history }){
                 {conteudos.map(conteudo => 
                     (<option value={conteudo.id}>{conteudo.nome_conteudo}</option>))}
             </select>
-            
           <button className="btn" onClick={cadastrarPerfil}>Salvar</button>    
           <button className="btn" onClick={cancelar}>Cancelar</button>   
-
         </form>
         </>
-
         )
-
 }

@@ -13,6 +13,9 @@ export default function Conteudo({ history }){
     const [conteudos, setConteudos] = useState(['']);
     
     useEffect(() => {
+        if(!localStorage.getItem('usuario')){
+            history.push('');
+        }
         api.get(`conteudos`).then(resp => {
             setConteudos(resp.data);
         })
@@ -21,7 +24,6 @@ export default function Conteudo({ history }){
     async function handleSubmit(event){
         event.preventDefault()
 
-
         history.push('/inicial');
     }
 
@@ -29,7 +31,7 @@ export default function Conteudo({ history }){
         event.preventDefault()
         const conteudoNovo = {nome_conteudo: nome_conteudo}
 
-        const conteudo = api.post(`conteudos`,conteudoNovo).then(resp => {
+        const conteudo = await api.post(`conteudos`,conteudoNovo).then(resp => {
             return resp.data;
         }).catch(console.log(`Error: ${console.error}`));
 
@@ -37,31 +39,31 @@ export default function Conteudo({ history }){
             setConteudos(resp.data);
         })
 
-        api.get(`conteudo/${nome_conteudo}`).then(resp => {
+        await api.get(`conteudo/${nome_conteudo}`).then(resp => {
             setID(resp.data);
         })
 
         const pautaA = {desc_pauta: desc_pautaA}
-        api.post(`conteudos/${id}/pautas`,pautaA).then(resp => {
+        await api.post(`conteudos/${conteudo.id}/pautas`,pautaA).then(resp => {
             return resp.data;
         }).catch(console.log(`Error: ${console.error}`));
 
         const pautaB = {desc_pauta: desc_pautaB}
-        api.post(`conteudos/${id}/pautas`,pautaB).then(resp => {
+        await api.post(`conteudos/${conteudo.id}/pautas`,pautaB).then(resp => {
             return resp.data;
         }).catch(console.log(`Error: ${console.error}`));
 
         const pautaC = {desc_pauta: desc_pautaC}
-        api.post(`conteudos/${id}/pautas`,pautaC).then(resp => {
+        await api.post(`conteudos/${conteudo.id}/pautas`,pautaC).then(resp => {
             return resp.data;
         }).catch(console.log(`Error: ${console.error}`));
 
         const pautaD = {desc_pauta: desc_pautaD}
-        api.post(`conteudos/${id}/pautas`,pautaD).then(resp => {
+        await api.post(`conteudos/${conteudo.id}/pautas`,pautaD).then(resp => {
             return resp.data;
         }).catch(console.log(`Error: ${console.error}`));
 
-        history.push('/conteudo');
+        history.push('/inicial');
     }  
 
     async function cancelar(event){
@@ -69,22 +71,30 @@ export default function Conteudo({ history }){
 
         history.push('/inicial');
     }
-
+    
     return (
         <>
         <p>
           <strong>Cadastrar Conteúdo</strong>
         </p>
-      
-        <form onSubmit = {handleSubmit}> 
+        {/*
+            <form onSubmit = {handleSubmit}> 
             <label>Selecionar Conteúdo já cadastrado:</label>
-            <select id="listaConteudos">
+            <select id="listaConteudos" onChange={event => setConteudoExistente(event.target.value)}>
                 <option value = '0'>Selecione um Conteúdo</option>
                 {conteudos.map(conteudo => (<option key={conteudo.id} value={conteudo.id}>
                     {conteudo.nome_conteudo}</option>))}
-            </select>       
+            </select> 
+            <label>Pautas Existentes:</label>
+                <label>{conteudoExistente}</label>
+                <h>{conteudoExistente}</h>
+            <select id="listaConteudos" onChange={event => setConteudoExistente(event.target.value)}>
+                <option value = '0'>Pautas Relacionadas</option>
+                {conteudos.map(conteudo => (<option key={conteudo.id} value={conteudo.id}>
+                    {conteudo.nome_conteudo}</option>))}
+            </select>         
         </form>
-
+        */}
         <form onSubmit = {handleSubmit}>
             <label>Novo Conteúdo</label>
             <input 
@@ -95,7 +105,6 @@ export default function Conteudo({ history }){
             onChange={ event => setNovoConteudo(event.target.value)}
             />               
         </form>
-        
         <form onSubmit = {handleSubmit}> 
             <label htmlFor="desc_pauta">PAUTAS*</label>
             <input 
@@ -106,7 +115,6 @@ export default function Conteudo({ history }){
             onChange={ event => setPautaA(event.target.value) }
             />        
         </form>
-
         <form onSubmit = {handleSubmit}>        
             <input 
             id="desc_pauta" 
@@ -116,7 +124,6 @@ export default function Conteudo({ history }){
             onChange={ event => setPautaB(event.target.value) }
             />
         </form>
-
         <form onSubmit = {handleSubmit}>         
             <input 
             id="desc_pauta" 
@@ -126,7 +133,6 @@ export default function Conteudo({ history }){
             onChange={ event => setPautaC(event.target.value) }
             />
         </form>
-
         <form onSubmit = {handleSubmit}> 
             <input 
             id="desc_pauta" 
@@ -136,12 +142,8 @@ export default function Conteudo({ history }){
             onChange={ event => setPautaD(event.target.value) }
             />
         </form>
-        
         <button className="btn" onClick={cadastrarConteudo}>Cadastrar</button>
         <button className="btn" onClick={cancelar}>Cancelar</button>
-        
         </>
-
         )
-
 }

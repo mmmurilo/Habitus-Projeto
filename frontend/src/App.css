@@ -15,6 +15,13 @@ body {
   background: #000 url('./assets/background.jpg') no-repeat;
   background-size: cover;
   -webkit-font-smoothing: antialiased !important;
+  width: auto;
+  height: auto;
+  background-repeat: no-repeat;
+  background-size: 100%;
+  background-color: #fff;
+  
+ 
 }
 
 body, input, button {

@@ -10,10 +10,18 @@ export default function Curso({ history }){
     const [data_fim_curso, setFinal] = useState('');
     const [perfil_id, setPerfil_curso] = useState('');
     const [listaPerfil,setListaPerfil] = useState(['']);
+    const [usuario,setUsuario] = useState(['']);
+    const [novoCurso,setNovoCurso] = useState(['']);
 
     useEffect(() => {
+      if(!localStorage.getItem('usuario')){
+        history.push('');
+      }
       api.get(`perfil`).then(resp => {
           setListaPerfil(resp.data);
+      })
+      api.get(`usuarios/${localStorage.getItem('usuario')}`).then(resp => {
+        setUsuario(resp.data);
       })
     }, []);  
 
@@ -25,9 +33,18 @@ export default function Curso({ history }){
         data_fim_curso: data_fim_curso, 
         perfil_id }
 
-      api.post(`perfil/${perfil_id}/cursos`,curso).then(resp => {
-          return resp.data;
+      await api.post(`perfil/${perfil_id}/cursos`,curso).then(resp => {
+        setNovoCurso(resp.data);
+        return (resp.data);
       }).catch(console.log(`Error: ${console.error}`));
+
+      const email_usuario = usuario.email_usuario;
+      const coordenador = {email_usuario: email_usuario};
+      
+      await api.post(`/curso/${titulo_curso}/coordenador`,coordenador).then(resp => {
+        console.log(resp.data)
+        return (resp.data);
+      })
 
       history.push('/inicial');
     }

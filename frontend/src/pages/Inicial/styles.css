@@ -30,23 +30,3 @@ ul.spot-list li span {
   font-size: 15px; 
   color: #999
 }
-
-/*
-ul.botao{
-    width: 300%;
-    height: 300px;
-    list-style: none;
-    grid-gap: 20px;
-    list-style: none;
-    align-self: center;
-
-    background-size: cover;
-    border-radius: 4px;
-    width: 100%;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    margin-bottom: 10px;
-    
-}
-
-*/

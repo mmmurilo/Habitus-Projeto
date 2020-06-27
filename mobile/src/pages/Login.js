@@ -5,11 +5,15 @@ import api from '../services/api';
 
 import logo from '../assets/logo.jpg';
 
-
 export default function Login( { navigation }){
-    const [email, setEmail] = useState('');
-    const [senha, setSenha] = useState('');
+    const [email_usuario, setEmail] = useState('');
+    const [senha_usuario, setSenha] = useState('');
 
+    async function login(event){
+        event.preventeDefault();
+
+        navigation.navigate('Home');
+    }
 
     //Após logado direcionar diretamente para a próxima tela
     /*
@@ -20,8 +24,8 @@ export default function Login( { navigation }){
             }
         })
     }, []);
-    
-*/
+    */
+
     async function handleSubmit(){
         const response = await api.post('/session', {
             email
@@ -49,11 +53,10 @@ export default function Login( { navigation }){
                     keyboardType="email-address"
                     autoCapitalize="none"    
                     autoCorrect={false} 
-                    value={email}     
-                    onChangeText={setEmail}     
+                    defaultValue={email_usuario}     
+                    onChangeText={email_usuario => setEmail(email_usuario)}     
                     titulo="email_usuario"                           
-                    
-                    />
+                />
 
                 <Text style={styles.label}>SUA SENHA *</Text>
                 <TextInput
@@ -63,14 +66,11 @@ export default function Login( { navigation }){
                     placeholderTextColor= "#999"
                     autoCorrect={false}   
                     titulo="senha_usuario" 
-                    //value={senha}     
-                    //onChangeText={setSenha}  
-                                                
+                    defaultValue={senha_usuario}     
+                    onChangeText={senha_usuario => setSenha(senha_usuario)}     
+                />    
 
-                    
-                    />    
-
-                <TouchableOpacity onPress={handleSubmit} style={styles.button}>
+                <TouchableOpacity onPress={login} style={styles.button}>
                     <Text style={styles.buttonText}>ENTRAR</Text>
                 </TouchableOpacity>
             </View>
@@ -119,6 +119,7 @@ const styles = StyleSheet.create({
         borderRadius: 2,
         marginTop: 30,
     },
+
     buttonText: {
         color: '#fff',
         fontWeight: 'bold',

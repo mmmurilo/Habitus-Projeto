@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, AsyncStorage, KeyboardAvoidingView, Platform,
-  Image, Autocomplete, Text, InputComponent, TextInput, TouchableOpacity, StyleSheet, ScrollView  } from 'react-native';
+  Image, Autocomplete, Text, InputComponent, Picker, TextInput, TouchableOpacity, StyleSheet, ScrollView  } from 'react-native';
 
 import api from '../../services/api';
 
@@ -18,6 +18,14 @@ export default function CadastrarFatoObservado( { navigation }){
   const [avaliado_id,setListaAvaliados] = useState('');
   const [fatos,setFatos] = useState('');
 
+  const [conteudos,setListaConteudos] = useState('');
+
+  useEffect(() => {
+    api.get(`conteudos`).then(resp => {
+        setListaConteudos(resp.data);
+    })
+  }, []);
+
   async function cadastrar(event){
     event.preventDefault();
 
@@ -26,12 +34,20 @@ export default function CadastrarFatoObservado( { navigation }){
     desc_fato: desc_fato, desc_atividade: desc_atividade,
     desc_providencia: desc_providencia, avaliado_id: avaliado_id}
 
+    console.log(tipo_fato);
+
     await api.post(`curso/${avaliador_id}/avaliador/fo`,fato).then(resp => {
         return resp.data;
     }).catch(console.log(`Error: ${console.error}`));
 
-    navigation.navigate('HomeAvaliador');
+    navigation.navigate('Home');
 
+  }
+
+  async function cancelar(event){
+    event.preventDefault();
+
+    navigation.navigate('Home');
   }
 
     async function handleSubmit(){
@@ -42,6 +58,7 @@ export default function CadastrarFatoObservado( { navigation }){
 
         //ir para proxima tela
        navigation.navigate('HomeAvaliador');
+
       */
     }
 
@@ -61,8 +78,8 @@ export default function CadastrarFatoObservado( { navigation }){
                     placeholderTextColor= "#999"       
                     type="date"
                     titulo="data_fato"
-                    value={data_fato}
-                    onChange={e => setData(e.target.value)}
+                    defaultValue={data_fato}
+                    onChangeText={data_fato => setData(data_fato)}
                     />
 
                 <Text style={styles.label}>Indicador</Text>
@@ -72,8 +89,8 @@ export default function CadastrarFatoObservado( { navigation }){
                     placeholder="Informe o indicador"
                     placeholderTextColor= "#999"
                     autoCorrect={false}  
-                    value={tipo_fato}
-                    onChange={e => setTipo(e.target.value)}           
+                    defaultValue={tipo_fato}
+                    onChangeText={tipo_fato => setTipo(tipo_fato)}           
                     />
 
                     <Text style={styles.label}>Avaliador</Text>
@@ -85,8 +102,8 @@ export default function CadastrarFatoObservado( { navigation }){
                       titulo = "avaliador_id"
                       type="number"
                       keyboardType = 'numeric'
-                      value={avaliador_id}
-                      onChange={e => setAvaliador_id((e.target.value))}
+                      defaultValue={avaliador_id}
+                      onChangeText={avaliador_id => setAvaliador_id((avaliador_id))}
                     />
                       <Text style={styles.label}>Avaliados</Text>                     
                       <TextInput
@@ -97,8 +114,8 @@ export default function CadastrarFatoObservado( { navigation }){
                       titulo = "listaAvaliados"
                       type="number"
                       keyboardType = 'numeric'
-                      value={avaliado_id}
-                      onChange={e => setListaAvaliados(e.target.value)}
+                      defaultValue={avaliado_id}
+                      onChangeText={avaliado_id => setListaAvaliados(avaliado_id)}
                     />  
 
                       <Text style={styles.label}>Atividade</Text>                     
@@ -108,18 +125,18 @@ export default function CadastrarFatoObservado( { navigation }){
                       placeholderTextColor= "#999"
                       autoCorrect={false}  
                       titulo = "desc_atividade"
-                      value={desc_atividade}
-                      onChange={e => setAtividade(e.target.value)}
+                      defaultValue={desc_atividade}
+                      onChangeText={desc_atividade => setAtividade(desc_atividade)}
                     />  
-                            <Text style={styles.label}>Fato</Text>                     
+                      <Text style={styles.label}>Fato</Text>                     
                       <TextInput
                       style={styles.Input}
                       placeholder="Informe o fato"
                       placeholderTextColor= "#999"
                       autoCorrect={false}  
                       titulo = "desc_fato"
-                      value={desc_fato}
-                      onChange={e => setFato(e.target.value)}
+                      defaultValue={desc_fato}
+                      onChangeText={desc_fato => setFato(desc_fato)}
 
                     />  
                       <Text style={styles.label}>Providência</Text>                     
@@ -129,21 +146,22 @@ export default function CadastrarFatoObservado( { navigation }){
                       placeholderTextColor= "#999"
                       autoCorrect={false}  
                       titulo = "desc_providencia"
-                      value={desc_providencia}
-                      onChange={e => setProvidencia(e.target.value)}
+                      defaultValue={desc_providencia}
+                      onChangeText={desc_providencia => setProvidencia(desc_providencia)}
                     />  
                      
-                       <Text style={styles.label}>Conteúdos</Text>                     
+                       <Text style={styles.label}>Conteúdos</Text>
                       <TextInput
                       style={styles.Input}
                       placeholder="Selecione os Conteúdos"
                       placeholderTextColor= "#999"
                       autoCorrect={false} 
                       titulo = "nome_conteudo"
-                      value={nome_conteudo}
-                      onChange={e => setConteudo(e.target.value)}
+                      defaultValue={nome_conteudo}
+                      onChangeText={nome_conteudo => setConteudo(nome_conteudo)}
                       
-                    />     
+                    />
+
                      <Text style={styles.label}>PAUTAS</Text>
 
                       <Text style={styles.label}>Pauta</Text>                     
@@ -153,15 +171,15 @@ export default function CadastrarFatoObservado( { navigation }){
                       placeholderTextColor= "#999"
                       autoCorrect={false}  
                       titulo = "desc_pauta"
-                      value={desc_pauta}
-                      onChange={e => setPauta(e.target.value)}  
+                      defaultValue={desc_pauta}
+                      onChangeText={desc_pauta => setPauta(desc_pauta)}  
                     />       
 
                 <TouchableOpacity style={styles.button} onPress={cadastrar}>
                     <Text style={styles.buttonText}>Salvar</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={handleSubmit} style={styles.button}>
+                <TouchableOpacity onPress={cancelar} style={styles.button}>
                     <Text style={styles.buttonText}>Deletar</Text>
                 </TouchableOpacity>
             </View>
