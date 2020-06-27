@@ -17,11 +17,13 @@ const CoordenadorController = require('./controllers/CoordenadorController');
 const FatoObservadoAvaliadorController = require('./controllers/FatoObservadoAvaliadorController');
 const FatoObservadoAvaliadoController = require('./controllers/FatoObservadoAvaliadoController');
 const LoginController = require('./controllers/LoginController');
+const UsuarioIdController = require('./controllers/UsuarioIdController');
 
 const routes = express.Router();
 
-routes.get('/login',LoginController.index); //login usuario
+routes.get('/login/:email_usuario/:senha_usuario',LoginController.index); //login usuario
 
+routes.get('/usuarios/:id',UsuarioIdController.index); //busca usuario pelo id
 routes.get('/usuarios',UsuarioController.index); //busca todos usuarios
 routes.post('/usuarios',UsuarioController.store); //cria usuario
 routes.get('/:avaliado_id/usuario/avaliado',UsuarioAvaliadoController.index); //busca info do usuario pelo id avaliado
@@ -45,7 +47,6 @@ routes.get('/cursos',CursoController.index); //busca todos os cursos
 routes.get('/perfil/:perfil_id/cursos',CursoPerfilController.index); //busca o curso com determinado perfil
 routes.post('/perfil/:perfil_id/cursos',CursoController.store); //cria curso com perfil
 
-
 routes.get('/curso/avaliado/:curso_id',AvaliadoController.index); //busca todos avaliados no curso
 routes.post('/curso/avaliado/:curso_id',AvaliadoController.store); //cria avaliado no curso (e no banco, se nao existir) 
 routes.delete('/curso/avaliado/:curso_id',AvaliadoController.delete); //deleta avaliado do curso (nao do banco)
@@ -58,7 +59,7 @@ routes.delete('/avaliador/:curso_id',AvaliadorController.delete); //deleta avali
 routes.get('/curso/avaliador/:curso_id/:usuario_id',IdAvaliadorController.index); //id do avaliador pelo id usuario e curso
 
 routes.get('/curso/:curso_id/coordenador',CoordenadorController.index); //busca todos coordenadores no curso
-routes.post('/curso/:curso_id/coordenador',CoordenadorController.store); //cria coordenador no curso (e no banco, se nao existir) 
+routes.post('/curso/:titulo_curso/coordenador',CoordenadorController.store); //cria coordenador no curso (e no banco, se nao existir) 
 routes.delete('/curso/:curso_id/coordenador',CoordenadorController.delete); //deleta coordenador do curso (nao do banco)
 
 routes.post('/curso/:avaliador_id/avaliador/fo',FatoObservadoAvaliadorController.store); //cadastra fo no id avaliador

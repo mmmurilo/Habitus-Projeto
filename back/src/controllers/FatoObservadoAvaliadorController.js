@@ -48,6 +48,8 @@ module.exports = {
         desc_atividade,desc_providencia,avaliado_id} = req.body;
         //listaAvaliados} = req.body;
     
+        console.log(tipo_fato);
+
         const avaliador = await Avaliador.findOne({where: {id: avaliador_id}});
 
         if(!avaliador){

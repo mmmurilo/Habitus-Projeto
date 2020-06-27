@@ -15,10 +15,12 @@ module.exports = {
     },
 
     async store(req,res){
-        const {curso_id} = req.params;
+        const {titulo_curso} = req.params;
         const {email_usuario} = req.body;
 
-        const curso = await Curso.findByPk(curso_id);
+        const curso = await Curso.findOne({
+            where: {titulo_curso: titulo_curso}
+        });
 
         if(!curso){
             return res.status(400).json({error:'Curso não encontrado'});

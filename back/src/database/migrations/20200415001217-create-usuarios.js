@@ -23,7 +23,7 @@ module.exports = {
         //ver atributo para verificar formato correto
       },
       senha_usuario:{
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: false,
         //ver atributo para configurar tamanho e algarismos para senha
       },
