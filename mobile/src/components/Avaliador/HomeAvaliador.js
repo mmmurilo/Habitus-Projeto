@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { View, AsyncStorage, KeyboardAvoidingView, Platform, Image, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-
+import { View, KeyboardAvoidingView, Platform, Image, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import api from '../../services/api';
 
 import logo from '../../assets/logo.jpg';
 
 
 export default function HomeAvaliador( { navigation }){
- 
+
 
 
     //Após logado direcionar diretamente para a próxima tela
@@ -19,22 +19,22 @@ export default function HomeAvaliador( { navigation }){
             }
         })
     }, []);
-    
+
 */
     async function handleSubmit(){
-    
+
         const { _id } = response.data;
 
         await AsyncStorage.setItem('user', _id);
 
         //ir para proxima tela
        navigation.navigate('HomeAvaliador');
-        
+
     }
 
     return(
         <View style={styles.container}>
-            <Image source={logo} />      
+            <Image source={logo} />
         </View>
 
     );

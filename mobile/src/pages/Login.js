@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, AsyncStorage, KeyboardAvoidingView, Platform, Image, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-
+import { View, KeyboardAvoidingView, Platform, Image, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import api from '../services/api';
 
 import logo from '../assets/logo.jpg';
@@ -9,10 +9,12 @@ export default function Login( { navigation }){
     const [email_usuario, setEmail] = useState('');
     const [senha_usuario, setSenha] = useState('');
 
-    async function login(event){
-        event.preventeDefault();
+    useEffect(() => {
+        // TODO: carregar a sessao do usuario
+    });
 
-        navigation.navigate('Home');
+    async function login(){
+        navigation.replace('Avaliador');
     }
 
     //Após logado direcionar diretamente para a próxima tela
@@ -36,8 +38,14 @@ export default function Login( { navigation }){
         await AsyncStorage.setItem('user', _id);
 
         //ir para proxima tela
-       navigation.navigate('HomeAvaliador');
-        
+        if (response.data.tipo_usuario === 'avaliador') {
+            navigation.navigate('Avaliador');
+        } else if (response.data.tipo_usuario === 'avaliado') {
+            navigation.navigate('Avaliado');
+        } else {
+            // mostrar mensage de erro, pois nao sabemos que tipo de usuario ele eh
+        }
+
     }
 
     return(
@@ -51,24 +59,24 @@ export default function Login( { navigation }){
                     placeholder="Seu e-mail"
                     placeholderTextColor= "#999"
                     keyboardType="email-address"
-                    autoCapitalize="none"    
-                    autoCorrect={false} 
-                    defaultValue={email_usuario}     
-                    onChangeText={email_usuario => setEmail(email_usuario)}     
-                    titulo="email_usuario"                           
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    defaultValue={email_usuario}
+                    onChangeText={email_usuario => setEmail(email_usuario)}
+                    titulo="email_usuario"
                 />
 
                 <Text style={styles.label}>SUA SENHA *</Text>
                 <TextInput
                     style={styles.Input}
-                    secureTextEntry={true} 
+                    secureTextEntry={true}
                     placeholder="Sua senha"
                     placeholderTextColor= "#999"
-                    autoCorrect={false}   
-                    titulo="senha_usuario" 
-                    defaultValue={senha_usuario}     
-                    onChangeText={senha_usuario => setSenha(senha_usuario)}     
-                />    
+                    autoCorrect={false}
+                    titulo="senha_usuario"
+                    defaultValue={senha_usuario}
+                    onChangeText={senha_usuario => setSenha(senha_usuario)}
+                />
 
                 <TouchableOpacity onPress={login} style={styles.button}>
                     <Text style={styles.buttonText}>ENTRAR</Text>

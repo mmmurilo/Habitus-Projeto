@@ -4,7 +4,7 @@ const Conteudo = require("../models/Conteudo");
 module.exports = {
     async index (req,res){
         const {conteudo_id} = req.params;
-        
+
         const conteudo = await Conteudo.findByPk(conteudo_id,{
             include: {association: 'pautas'}
         });
@@ -22,8 +22,28 @@ module.exports = {
             return res.status(400).json({error: "Conteúdo não existe"})
         }
 
-        const pauta = await Pauta.create({desc_pauta,conteudo_id});
+        await Pauta.create({desc_pauta,conteudo_id});
 
-        return res.json(pauta);
+        // retorna todo o conteudo
+        const conteudo2 = await Conteudo.findByPk(conteudo_id,{
+            include: {association: 'pautas'}
+        });
+        return res.json(conteudo2);
+    },
+
+    async delete (req,res){
+        const {conteudo_id, pauta_id} = req.params;
+
+        const pauta = await Pauta.findByPk(pauta_id, {
+            where: {conteudo_id}
+        });
+
+        if(pauta){
+            await pauta.destroy();
+        }
+        const conteudo = await Conteudo.findByPk(conteudo_id,{
+            include: {association: 'pautas'}
+        });
+        return res.json(conteudo);
     }
 };

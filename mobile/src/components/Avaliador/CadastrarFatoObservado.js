@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { View, AsyncStorage, KeyboardAvoidingView, Platform,
+import { View, KeyboardAvoidingView, Platform,
   Image, Autocomplete, Text, InputComponent, Picker, TextInput, TouchableOpacity, StyleSheet, ScrollView  } from 'react-native';
 
+import AsyncStorage from '@react-native-community/async-storage';
 import api from '../../services/api';
 
 
 export default function CadastrarFatoObservado( { navigation }){
-  
+
   const [data_fato,setData] = useState('');
   const [tipo_fato,setTipo] = useState('');
   const [nome_conteudo, setConteudo] = useState('');
@@ -63,19 +64,19 @@ export default function CadastrarFatoObservado( { navigation }){
     }
 
     return(
-      
+
       <ScrollView>
-        
+
         <View style={styles.container}>
-        <Text style={styles.label}>FATO OBSERVADO</Text>   
+        <Text style={styles.label}>FATO OBSERVADO</Text>
 
             <View style={styles.form}>
                 <Text style={styles.label}>Data/Hora *</Text>
                 <TextInput
-                    id="data" 
+                    id="data"
                     style={styles.Input}
                     placeholder=""
-                    placeholderTextColor= "#999"       
+                    placeholderTextColor= "#999"
                     type="date"
                     titulo="data_fato"
                     defaultValue={data_fato}
@@ -88,9 +89,9 @@ export default function CadastrarFatoObservado( { navigation }){
                     style={styles.Input}
                     placeholder="Informe o indicador"
                     placeholderTextColor= "#999"
-                    autoCorrect={false}  
+                    autoCorrect={false}
                     defaultValue={tipo_fato}
-                    onChangeText={tipo_fato => setTipo(tipo_fato)}           
+                    onChangeText={tipo_fato => setTipo(tipo_fato)}
                     />
 
                     <Text style={styles.label}>Avaliador</Text>
@@ -105,75 +106,75 @@ export default function CadastrarFatoObservado( { navigation }){
                       defaultValue={avaliador_id}
                       onChangeText={avaliador_id => setAvaliador_id((avaliador_id))}
                     />
-                      <Text style={styles.label}>Avaliados</Text>                     
+                      <Text style={styles.label}>Avaliados</Text>
                       <TextInput
                       style={styles.Input}
                       placeholder="Selecione os avaliados"
                       placeholderTextColor= "#999"
-                      autoCorrect={false} 
+                      autoCorrect={false}
                       titulo = "listaAvaliados"
                       type="number"
                       keyboardType = 'numeric'
                       defaultValue={avaliado_id}
                       onChangeText={avaliado_id => setListaAvaliados(avaliado_id)}
-                    />  
+                    />
 
-                      <Text style={styles.label}>Atividade</Text>                     
+                      <Text style={styles.label}>Atividade</Text>
                       <TextInput
                       style={styles.Input}
                       placeholder="Informe a atividade"
                       placeholderTextColor= "#999"
-                      autoCorrect={false}  
+                      autoCorrect={false}
                       titulo = "desc_atividade"
                       defaultValue={desc_atividade}
                       onChangeText={desc_atividade => setAtividade(desc_atividade)}
-                    />  
-                      <Text style={styles.label}>Fato</Text>                     
+                    />
+                      <Text style={styles.label}>Fato</Text>
                       <TextInput
                       style={styles.Input}
                       placeholder="Informe o fato"
                       placeholderTextColor= "#999"
-                      autoCorrect={false}  
+                      autoCorrect={false}
                       titulo = "desc_fato"
                       defaultValue={desc_fato}
                       onChangeText={desc_fato => setFato(desc_fato)}
 
-                    />  
-                      <Text style={styles.label}>Providência</Text>                     
+                    />
+                      <Text style={styles.label}>Providência</Text>
                       <TextInput
                       style={styles.Input}
                       placeholder="Informe a Providência"
                       placeholderTextColor= "#999"
-                      autoCorrect={false}  
+                      autoCorrect={false}
                       titulo = "desc_providencia"
                       defaultValue={desc_providencia}
                       onChangeText={desc_providencia => setProvidencia(desc_providencia)}
-                    />  
-                     
+                    />
+
                        <Text style={styles.label}>Conteúdos</Text>
                       <TextInput
                       style={styles.Input}
                       placeholder="Selecione os Conteúdos"
                       placeholderTextColor= "#999"
-                      autoCorrect={false} 
+                      autoCorrect={false}
                       titulo = "nome_conteudo"
                       defaultValue={nome_conteudo}
                       onChangeText={nome_conteudo => setConteudo(nome_conteudo)}
-                      
+
                     />
 
                      <Text style={styles.label}>PAUTAS</Text>
 
-                      <Text style={styles.label}>Pauta</Text>                     
+                      <Text style={styles.label}>Pauta</Text>
                       <TextInput
                       style={styles.Input}
                       placeholder="Informe a pauta"
                       placeholderTextColor= "#999"
-                      autoCorrect={false}  
+                      autoCorrect={false}
                       titulo = "desc_pauta"
                       defaultValue={desc_pauta}
-                      onChangeText={desc_pauta => setPauta(desc_pauta)}  
-                    />       
+                      onChangeText={desc_pauta => setPauta(desc_pauta)}
+                    />
 
                 <TouchableOpacity style={styles.button} onPress={cadastrar}>
                     <Text style={styles.buttonText}>Salvar</Text>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, AsyncStorage, KeyboardAvoidingView, Platform, Image, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, KeyboardAvoidingView, Platform, Image, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 
+import AsyncStorage from '@react-native-community/async-storage';
 import api from '../../services/api';
 
 import usuario from '../../assets/usuario.jpg';
@@ -9,7 +10,7 @@ import usuario from '../../assets/usuario.jpg';
 export default function CadastroAvaliadoF( { navigation }){
 
     async function handleSubmit(){
-        
+
 
         const { _id } = response.data;
 
@@ -17,7 +18,7 @@ export default function CadastroAvaliadoF( { navigation }){
 
         //ir para proxima tela
        navigation.navigate('HomeAvaliador');
-        
+
     }
 
     return(
@@ -26,26 +27,26 @@ export default function CadastroAvaliadoF( { navigation }){
 
 
             <View style={styles.container}>
-                <Image source={usuario} />          
+                <Image source={usuario} />
             </View>
             <Text style={styles.label}>Nome Completo</Text>
             <Text style={styles.label}>E-mail</Text>
             <View style={styles.form}>
-                
+
 
                 <Text style={styles.label}>Senha *</Text>
                 <TextInput
                     style={styles.Input}
-                    secureTextEntry={true} 
+                    secureTextEntry={true}
                     placeholder="Sua senha"
                     placeholderTextColor= "#999"
-                    autoCorrect={false}    
-                    //value={senha}     
-                    //onChangeText={setSenha}  
-                                      
+                    autoCorrect={false}
+                    //value={senha}
+                    //onChangeText={setSenha}
 
-                    
-                    />    
+
+
+                    />
 
                 <TouchableOpacity onPress={handleSubmit} style={styles.button}>
                     <Text style={styles.buttonText}>Salvar</Text>
@@ -53,8 +54,8 @@ export default function CadastroAvaliadoF( { navigation }){
                 <TouchableOpacity onPress={handleSubmit} style={styles.button}>
                     <Text style={styles.buttonText}>Cancelar</Text>
                 </TouchableOpacity>
-                
-                
+
+
             </View>
         </View>
 

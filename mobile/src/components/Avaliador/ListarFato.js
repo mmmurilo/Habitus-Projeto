@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, AsyncStorage, KeyboardAvoidingView, Platform, Image, FlatList, Picker, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, KeyboardAvoidingView, Platform, Image, FlatList, Picker, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import api from '../../services/api';
 
@@ -18,12 +19,12 @@ export default function ListarFato( { navigation }){
         event.preventDefault();
         api.get(`/curso/${avaliador_id}/avaliador/fo`).then(resp => {
             setFatos(resp.data);
-        }).catch(console.log(`Error: ${console.error}`));   
-        
+        }).catch(console.log(`Error: ${console.error}`));
+
     }
 
     async function handleSubmit(){
-        
+
 
         const { _id } = response.data;
 
@@ -31,7 +32,7 @@ export default function ListarFato( { navigation }){
 
         //ir para proxima tela
        navigation.navigate('HomeAvaliador');
-        
+
     }
 
     return(
@@ -39,7 +40,7 @@ export default function ListarFato( { navigation }){
             <Text style={styles.label}>LISTAR FATO</Text>
 
             <View style={styles.form}>
-                
+
                 <Text style={styles.label}>Selecione o Avaliador</Text>
                 <TextInput
                     style={styles.Input}
@@ -49,8 +50,8 @@ export default function ListarFato( { navigation }){
                     type="number"
                     keyboardType='numeric'
                     defaultValue= {avaliador_id}
-                    onChangeText= {avaliador_id => setAvaliador(avaliador_id)}     
-                    /> 
+                    onChangeText= {avaliador_id => setAvaliador(avaliador_id)}
+                    />
 
 <View>
             {fatos.map(fato => <Text>{'\nData: '}{fato.data_fato} {'Tipo: '}{fato.tipo_fato}{'\n'}
@@ -59,15 +60,15 @@ export default function ListarFato( { navigation }){
             {'\nProvidência: '} {fato.providenciaFato.desc_providencia} {'\nAlunos: '}
             {(fato.avaliados).map(usuario => <Text>{usuario.usuarioAvaliado.nome_usuario}{'\n'}</Text>)}
             </Text>)}
-    </View> 
+    </View>
 
                 <TouchableOpacity onPress={exibir} style={styles.button}>
                     <Text style={styles.buttonText}>Exibir</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={handleSubmit} style={styles.button}>
                     <Text style={styles.buttonText}>Cancelar</Text>
-                </TouchableOpacity>               
-                
+                </TouchableOpacity>
+
             </View>
         </View>
 

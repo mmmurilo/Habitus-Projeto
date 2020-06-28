@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, AsyncStorage, KeyboardAvoidingView, Platform, Image, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, KeyboardAvoidingView, Platform, Image, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import api from '../../services/api';
 
@@ -9,7 +10,7 @@ import api from '../../services/api';
 export default function ListarFatoAvaliado( { navigation }){
 
     async function handleSubmit(){
-        
+
 
         const { _id } = response.data;
 
@@ -17,7 +18,7 @@ export default function ListarFatoAvaliado( { navigation }){
 
         //ir para proxima tela
        navigation.navigate('HomeAvaliador');
-        
+
     }
 
     return(
@@ -25,20 +26,20 @@ export default function ListarFatoAvaliado( { navigation }){
             <Text style={styles.label}>LISTAR FATO</Text>
 
             <View style={styles.form}>
-                
+
                 <Text style={styles.label}>Selecione o fato observado </Text>
                 <TextInput
                     style={styles.Input}
-                    secureTextEntry={true} 
+                    secureTextEntry={true}
                     placeholder="Fato 01"
                     placeholderTextColor= "#999"
-                    autoCorrect={false}    
-                    //value={senha}     
-                    //onChangeText={setSenha}  
-                                      
+                    autoCorrect={false}
+                    //value={senha}
+                    //onChangeText={setSenha}
 
-                    
-                    />    
+
+
+                    />
 
                 <TouchableOpacity onPress={handleSubmit} style={styles.button}>
                     <Text style={styles.buttonText}>Alterar</Text>
@@ -46,8 +47,8 @@ export default function ListarFatoAvaliado( { navigation }){
                 <TouchableOpacity onPress={handleSubmit} style={styles.button}>
                     <Text style={styles.buttonText}>Cancelar</Text>
                 </TouchableOpacity>
-                
-                
+
+
             </View>
         </View>
 
