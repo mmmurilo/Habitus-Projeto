@@ -3,7 +3,7 @@ const Usuario = require('../models/Usuario');
 const Avaliador = require('../models/Avaliador');
 
 module.exports={
-    
+
     async index(req,res){
         const {curso_id} = req.params;
 
@@ -15,6 +15,15 @@ module.exports={
 
         return res.json(avaliador);
     },
+
+    async all(req,res){
+        const avaliadores = await Avaliador.findAll({
+            attributes: [],
+            include: 'usuarioAvaliador'
+        })
+        return res.json(avaliadores);
+    },
+
 
     async store(req,res){
         const {curso_id} = req.params;
@@ -30,9 +39,9 @@ module.exports={
             where: { email_usuario },
             attributes: ['id']
         });
-    
+
         const avaliador = await Avaliador.create({usuario_id: usuario.id,curso_id});
-    
+
         return res.json(avaliador);
     },
 
@@ -55,7 +64,7 @@ module.exports={
         });
 
         await avaliador.destroy(avaliador);
-    
+
         return res.json();
     }
 

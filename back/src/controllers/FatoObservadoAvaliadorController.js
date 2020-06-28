@@ -10,10 +10,15 @@ const Usuario = require('../models/Usuario');
 
 module.exports = {
     async index(req,res){
-        const {avaliador_id} = req.params;
+        const {avaliador_id} = req.query;
+        const where = {};
+
+        if (avaliador_id) {
+            where.avaliador_id = avaliador_id;
+        }
 
         const fatoObservado = await FatoObservado.findAll({
-            where: {avaliador_id},
+            where,
             attributes: ['data_fato','tipo_fato'],
             include: [
                 {model: Conteudo,
@@ -30,7 +35,7 @@ module.exports = {
                 attributes: ['desc_atividade']},
                 {model: Providencia,
                 as: 'providenciaFato',
-                attributes: ['desc_providencia']},                
+                attributes: ['desc_providencia']},
                 {model: Avaliado,
                 as: 'avaliados',
                 through: {attributes: []},
@@ -41,13 +46,13 @@ module.exports = {
 
         return res.json(fatoObservado);
     },
-    
+
     async store(req,res){
         const {avaliador_id} = req.params;
         const {data_fato, tipo_fato,nome_conteudo,desc_pauta,desc_fato,
         desc_atividade,desc_providencia,avaliado_id} = req.body;
         //listaAvaliados} = req.body;
-    
+
         console.log(tipo_fato);
 
         const avaliador = await Avaliador.findOne({where: {id: avaliador_id}});
@@ -55,11 +60,11 @@ module.exports = {
         if(!avaliador){
             return res.status(400).json({error:'Avaliador não encontrado'});
         }
-    
+
         const conteudo = await Conteudo.findOne({
             where: { nome_conteudo }
         });
-    
+
         const pauta = await Pauta.findOne({
             where: { desc_pauta }
         });
@@ -75,11 +80,11 @@ module.exports = {
         });
 
         const atividade = await Atividade.findOne({where: {desc_atividade}});
-        
+
         const buscaProvidencia = await Providencia.findOrCreate({
             where: { desc_providencia }
         });
-        
+
         const providencia = await Providencia.findOne({where: {desc_providencia}});
 
         const fatoObservado = await FatoObservado.create({
@@ -97,7 +102,7 @@ module.exports = {
         fatoObservado.addAvaliado(avaliado);
         /*
         listaAvaliados.forEach(addAvaliado);
-        
+
         async function addAvaliado(nome_avaliado){
             const usuario = await Usuario.findOne({
                 where: {nome_usuario : nome_avaliado}
@@ -107,7 +112,7 @@ module.exports = {
             })
             console.log(avaliado.id)
             fatoObservado.addAvaliado(avaliado);
-        };      
+        };
         */
 
         return res.json(fatoObservado);
@@ -140,8 +145,8 @@ module.exports = {
             })
             console.log(avaliado.id)
             fatoObservado.removeAvaliado(avaliado);
-        }; 
-    
+        };
+
         return res.json();
     }
 

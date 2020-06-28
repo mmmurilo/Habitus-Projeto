@@ -11,27 +11,24 @@ export default function ListarFato( { navigation }){
 
     const [avaliador_id,setAvaliador] = useState('');
     const [nome_avaliador,setNome] = useState('');
-    const [fatos, setFatos] = useState(['']);
-    const [avaliados,setAvaliados] = useState(['']);
-    const [texto, setTexto] = useState(['']);
+    const [fatos, setFatos] = useState([]);
+    const [avaliados,setAvaliados] = useState([]);
+    const [texto, setTexto] = useState('');
 
-    async function exibir(event){
-        event.preventDefault();
-        api.get(`/curso/${avaliador_id}/avaliador/fo`).then(resp => {
+    // var text = "";
+    // var lista = [];
+    // var obj = {a: 1, b: 2};
+    // obj.a => 1
+    // obj['a'] => 1
+
+    async function exibir(){
+        api.get(`/curso/fo`, {
+            params: {
+                avaliador_id
+            }
+        }).then(resp => {
             setFatos(resp.data);
-        }).catch(console.log(`Error: ${console.error}`));
-
-    }
-
-    async function handleSubmit(){
-
-
-        const { _id } = response.data;
-
-        await AsyncStorage.setItem('user', _id);
-
-        //ir para proxima tela
-       navigation.navigate('HomeAvaliador');
+        }).catch(() => console.log(`Error: ${console.error}`));
 
     }
 
@@ -53,22 +50,18 @@ export default function ListarFato( { navigation }){
                     onChangeText= {avaliador_id => setAvaliador(avaliador_id)}
                     />
 
-<View>
+            <View>
             {fatos.map(fato => <Text>{'\nData: '}{fato.data_fato} {'Tipo: '}{fato.tipo_fato}{'\n'}
             {'Conteúdo Atitudinal: '} {fato.conteudoFato.nome_conteudo} {'\nPauta: '} {fato.pautaFato.desc_pauta}
             {'\nFato: '} {fato.fatoFato.desc_fato} {'\nAtividade: '} {fato.atividadeFato.desc_atividade}
             {'\nProvidência: '} {fato.providenciaFato.desc_providencia} {'\nAlunos: '}
             {(fato.avaliados).map(usuario => <Text>{usuario.usuarioAvaliado.nome_usuario}{'\n'}</Text>)}
             </Text>)}
-    </View>
+            </View>
 
                 <TouchableOpacity onPress={exibir} style={styles.button}>
                     <Text style={styles.buttonText}>Exibir</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={handleSubmit} style={styles.button}>
-                    <Text style={styles.buttonText}>Cancelar</Text>
-                </TouchableOpacity>
-
             </View>
         </View>
 

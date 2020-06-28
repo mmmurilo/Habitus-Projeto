@@ -19,23 +19,23 @@ export default function CadastrarFatoObservado( { navigation }){
   const [avaliado_id,setListaAvaliados] = useState('');
   const [fatos,setFatos] = useState('');
 
+  const [avaliadores, setAvaliadores] = useState([]);
   const [conteudos,setListaConteudos] = useState('');
 
   useEffect(() => {
     api.get(`conteudos`).then(resp => {
         setListaConteudos(resp.data);
     })
+    api.get('avaliador').then(resp => {
+      setAvaliadores(resp.data);
+    });
   }, []);
 
   async function cadastrar(event){
-    event.preventDefault();
-
     const fato = {avaliador_id: avaliador_id,data_fato: data_fato, tipo_fato: tipo_fato,
     nome_conteudo: nome_conteudo, desc_pauta: desc_pauta,
     desc_fato: desc_fato, desc_atividade: desc_atividade,
     desc_providencia: desc_providencia, avaliado_id: avaliado_id}
-
-    console.log(tipo_fato);
 
     await api.post(`curso/${avaliador_id}/avaliador/fo`,fato).then(resp => {
         return resp.data;
@@ -46,7 +46,6 @@ export default function CadastrarFatoObservado( { navigation }){
   }
 
   async function cancelar(event){
-    event.preventDefault();
 
     navigation.navigate('Home');
   }
@@ -95,7 +94,19 @@ export default function CadastrarFatoObservado( { navigation }){
                     />
 
                     <Text style={styles.label}>Avaliador</Text>
-                    <TextInput
+                    <Picker
+                      selectedValue={avaliador_id}
+                      onValueChange={(itemValue, itemIndex) => setAvaliador_id(itemValue)}
+                    >
+                      {avaliadores.map(avaliador => (
+                        <Picker.Item
+                          key={avaliador.usuarioAvaliador.id}
+                          label={avaliador.usuarioAvaliador.nome_usuario}
+                          value={avaliador.usuarioAvaliador.id}
+                        />
+                      ))}
+                    </Picker>
+                    {/* <TextInput
                       style={styles.Input}
                       placeholder="Selecione o avaliador"
                       placeholderTextColor= "#999"
@@ -105,7 +116,7 @@ export default function CadastrarFatoObservado( { navigation }){
                       keyboardType = 'numeric'
                       defaultValue={avaliador_id}
                       onChangeText={avaliador_id => setAvaliador_id((avaliador_id))}
-                    />
+                    /> */}
                       <Text style={styles.label}>Avaliados</Text>
                       <TextInput
                       style={styles.Input}
