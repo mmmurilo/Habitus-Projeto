@@ -1,66 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import { View, KeyboardAvoidingView, Platform, Image, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-
 import AsyncStorage from '@react-native-community/async-storage';
 import api from '../../services/api';
 
-import usuario from '../../assets/usuario.jpg';
+import logo from '../../assets/logo.jpg';
 
 
-export default function CadastroAvaliadoF( { navigation }){
-
+export default function HomeAvaliado( { navigation }){
+    //Após logado direcionar diretamente para a próxima tela
+    useEffect(() => {
+        console.log(AsyncStorage.getItem('usuario'));
+    }, []);
+    /*
     async function handleSubmit(){
-
 
         const { _id } = response.data;
 
         await AsyncStorage.setItem('user', _id);
 
         //ir para proxima tela
-       navigation.navigate('HomeAvaliador');
-
+       navigation.navigate('HomeAvaliado');
     }
+*/
 
     return(
+        
         <View style={styles.container}>
-            <Text style={styles.label}>CADASTRO</Text>
-
-
-            <View style={styles.container}>
-                <Image source={usuario} />
-            </View>
-            <Text style={styles.label}>Nome Completo</Text>
-            <Text style={styles.label}>E-mail</Text>
-            <View style={styles.form}>
-
-
-                <Text style={styles.label}>Senha *</Text>
-                <TextInput
-                    style={styles.Input}
-                    secureTextEntry={true}
-                    placeholder="Sua senha"
-                    placeholderTextColor= "#999"
-                    autoCorrect={false}
-                    //value={senha}
-                    //onChangeText={setSenha}
-
-
-
-                    />
-
-                <TouchableOpacity onPress={handleSubmit} style={styles.button}>
-                    <Text style={styles.buttonText}>Salvar</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={handleSubmit} style={styles.button}>
-                    <Text style={styles.buttonText}>Cancelar</Text>
-                </TouchableOpacity>
-
-
-            </View>
+            <Image source={logo} />
+            <Text style={styles.label}>Bem vindo!</Text>
         </View>
 
     );
 }
+
+
 
 const styles = StyleSheet.create({
     container: {
@@ -73,14 +46,16 @@ const styles = StyleSheet.create({
     form: {
         alignSelf: 'stretch',
         paddingHorizontal: 30,
-        marginTop: 20,
+        marginTop: 50,
     },
 
     label: {
         fontWeight: 'bold',
         color: '#444',
-        marginBottom: 10,
-        marginTop: 40
+        marginBottom: 8,
+        marginTop: 10,
+        
+        
     },
 
     input: {

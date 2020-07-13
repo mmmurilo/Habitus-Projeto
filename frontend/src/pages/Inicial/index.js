@@ -21,8 +21,10 @@ export default function Inicial({history}){
         history.push('');
     }
     return (
-    <> 
-        <label>Bem vindo {usuario.nome_usuario}</label>
+    <>  
+
+        <h5>Bem vindo! {usuario.nome_usuario}</h5>
+      
         <ul className="botao">
             <Link to="/conteudo">
                 <button className="btn">Cadastrar Conteúdo</button>           
@@ -37,7 +39,7 @@ export default function Inicial({history}){
                 <button className="btn" type="submit">Cadastrar Usuarios</button>                       
             </Link>
             <Link to="">
-                <button className="btn" type="submit" onClick={logout}>Logout</button>                       
+                <button className="btn" type="submit" onClick={logout}>Sair</button>                       
             </Link>
             {/*
             <Link to="/relatorio">

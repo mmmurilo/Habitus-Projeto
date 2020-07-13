@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, AsyncStorage, KeyboardAvoidingView, Platform, Image, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-
+import { View, AsyncStorage, Image, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import api from '../services/api';
 
 import logo from '../assets/logo.jpg';
@@ -9,35 +8,27 @@ export default function Login( { navigation }){
     const [email_usuario, setEmail] = useState('');
     const [senha_usuario, setSenha] = useState('');
 
-    async function login(event){
-        event.preventeDefault();
-
-        navigation.navigate('Home');
-    }
-
-    //Após logado direcionar diretamente para a próxima tela
-    /*
     useEffect(() => {
-        AsyncStorage.getItem('user').then(user => {
-            if(user){
-                navigation.navigate('List');
-            }
-        })
-    }, []);
-    */
+        // TODO: carregar a sessao do usuario
+    });
 
-    async function handleSubmit(){
-        const response = await api.post('/session', {
-            email
-        })
-
-        const { _id } = response.data;
-
-        await AsyncStorage.setItem('user', _id);
-
-        //ir para proxima tela
-       navigation.navigate('HomeAvaliador');
+    async function login(){
+        const user = await api.post(`login`, {
+          email_usuario,
+          senha_usuario
+        });
+        const id = user.data.id;
+        try{
+            await AsyncStorage.setItem('usuario',JSON.stringify({id}));
+        }catch(e){
+            alert(e)
+        }
         
+        if(user.data.tipo_usuario === 'Avaliado'){
+            navigation.navigate('Avaliado');
+        } else if (user.data.tipo_usuario === 'Avaliador'){
+            navigation.navigate('Avaliador');
+        }
     }
 
     return(
@@ -51,24 +42,24 @@ export default function Login( { navigation }){
                     placeholder="Seu e-mail"
                     placeholderTextColor= "#999"
                     keyboardType="email-address"
-                    autoCapitalize="none"    
-                    autoCorrect={false} 
-                    defaultValue={email_usuario}     
-                    onChangeText={email_usuario => setEmail(email_usuario)}     
-                    titulo="email_usuario"                           
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    defaultValue={email_usuario}
+                    onChangeText={email_usuario => setEmail(email_usuario)}
+                    titulo="email_usuario"
                 />
 
                 <Text style={styles.label}>SUA SENHA *</Text>
                 <TextInput
                     style={styles.Input}
-                    secureTextEntry={true} 
+                    secureTextEntry={true}
                     placeholder="Sua senha"
                     placeholderTextColor= "#999"
-                    autoCorrect={false}   
-                    titulo="senha_usuario" 
-                    defaultValue={senha_usuario}     
-                    onChangeText={senha_usuario => setSenha(senha_usuario)}     
-                />    
+                    autoCorrect={false}
+                    titulo="senha_usuario"
+                    defaultValue={senha_usuario}
+                    onChangeText={senha_usuario => setSenha(senha_usuario)}
+                />
 
                 <TouchableOpacity onPress={login} style={styles.button}>
                     <Text style={styles.buttonText}>ENTRAR</Text>

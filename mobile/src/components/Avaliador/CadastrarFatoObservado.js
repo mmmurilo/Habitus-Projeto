@@ -1,179 +1,178 @@
 import React, { useState, useEffect } from 'react';
-import { View, AsyncStorage, KeyboardAvoidingView, Platform,
+import { View, KeyboardAvoidingView, Platform,
   Image, Autocomplete, Text, InputComponent, Picker, TextInput, TouchableOpacity, StyleSheet, ScrollView  } from 'react-native';
-
+import DatePicker from 'react-native-datepicker';
+import AsyncStorage from '@react-native-community/async-storage';
 import api from '../../services/api';
 
 
 export default function CadastrarFatoObservado( { navigation }){
-  
+
+  const [usuario_id,setIdUser] = useState('');
   const [data_fato,setData] = useState('');
   const [tipo_fato,setTipo] = useState('');
-  const [nome_conteudo, setConteudo] = useState('');
-  const [desc_pauta, setPauta] = useState('');
+  const [conteudo_id, setConteudo] = useState('');
+  const [pauta_id, setPauta] = useState('');
   const [desc_fato, setFato] = useState('');
   const [desc_atividade, setAtividade] = useState('');
   const [desc_providencia, setProvidencia] = useState('');
-  const [avaliador_id, setAvaliador_id] = useState('');
-  const [avaliado_id,setListaAvaliados] = useState('');
-  const [fatos,setFatos] = useState('');
+  const [avaliador_id, setAvaliador] = useState('');
+  const [nome_avaliado,setAvaliado] = useState('');
+  const [curso_id,setCurso] = useState('');
 
-  const [conteudos,setListaConteudos] = useState('');
+  const [conteudos,setListaConteudos] = useState([]);
+  const [pautas,setListaPautas] = useState([]);
+
+  async function carregarUsuario(){
+    try{
+        const usuario = await AsyncStorage.getItem('usuario');
+        setIdUser(JSON.parse(usuario).id);
+        await api.get(`curso/avaliador/${usuario_id}`).then(resp => {
+          setAvaliador(resp.data.id);
+          setCurso(resp.data.curso_id);
+        })
+    }catch(e){
+    }
+  }
+  
+  async function selecionarConteudo(itemValue){
+    setConteudo(itemValue);
+    await api.get(`conteudos/${conteudo_id}/pautas`).then(resp => {
+      setListaPautas(resp.data.pautas);
+    })
+  };
 
   useEffect(() => {
-    api.get(`conteudos`).then(resp => {
+    carregarUsuario();
+    api.get('conteudos').then(resp => {
         setListaConteudos(resp.data);
     })
+    console.log(usuario_id);
+    console.log(avaliador_id);
   }, []);
 
   async function cadastrar(event){
-    event.preventDefault();
-
     const fato = {avaliador_id: avaliador_id,data_fato: data_fato, tipo_fato: tipo_fato,
-    nome_conteudo: nome_conteudo, desc_pauta: desc_pauta,
+    conteudo_id: conteudo_id, pauta_id: pauta_id,
     desc_fato: desc_fato, desc_atividade: desc_atividade,
-    desc_providencia: desc_providencia, avaliado_id: avaliado_id}
+    desc_providencia: desc_providencia, nome_avaliado: nome_avaliado}
 
-    console.log(tipo_fato);
-
-    await api.post(`curso/${avaliador_id}/avaliador/fo`,fato).then(resp => {
+    await api.post(`curso/avaliador/fo`,fato).then(resp => {
         return resp.data;
     }).catch(console.log(`Error: ${console.error}`));
-
-    navigation.navigate('Home');
-
+    
+    navigation.navigate('AvaliadorHome');
   }
 
   async function cancelar(event){
-    event.preventDefault();
-
-    navigation.navigate('Home');
+    navigation.navigate('AvaliadorHome');
   }
 
-    async function handleSubmit(){
-      /*
-        const { _id } = response.data;
-
-        await AsyncStorage.setItem('user', _id);
-
-        //ir para proxima tela
-       navigation.navigate('HomeAvaliador');
-
-      */
-    }
-
-    return(
-      
-      <ScrollView>
-        
-        <View style={styles.container}>
-        <Text style={styles.label}>FATO OBSERVADO</Text>   
-
+  return(
+    <ScrollView>
+      <View style={styles.container}>
+        <Text style={styles.label}>FATO OBSERVADO</Text>
             <View style={styles.form}>
-                <Text style={styles.label}>Data/Hora *</Text>
+                <Text style={styles.label}>Data/Hora</Text>
+                
                 <TextInput
-                    id="data" 
+                    id="data"
                     style={styles.Input}
-                    placeholder=""
-                    placeholderTextColor= "#999"       
+                    placeholder="Insira a data AAAA/MM/DD"
+                    placeholderTextColor= "#999"
                     type="date"
                     titulo="data_fato"
                     defaultValue={data_fato}
                     onChangeText={data_fato => setData(data_fato)}
-                    />
+                />
 
                 <Text style={styles.label}>Indicador</Text>
-
+                <Picker selectedValue={tipo_fato}
+                    onValueChange={(itemValue, itemIndex) => setTipo(itemValue)}>
+                      <Picker.Item label="Neutro" value="Neutro"></Picker.Item>
+                      <Picker.Item label="Positivo" value="Positivo"></Picker.Item>
+                      <Picker.Item label="Negativo" value="Negativo"></Picker.Item>
+                </Picker>
+                      
+                <Text style={styles.label}>Avaliado</Text>
                 <TextInput
                     style={styles.Input}
-                    placeholder="Informe o indicador"
+                    placeholder="Informe o avaliado"
                     placeholderTextColor= "#999"
-                    autoCorrect={false}  
-                    defaultValue={tipo_fato}
-                    onChangeText={tipo_fato => setTipo(tipo_fato)}           
-                    />
+                    autoCorrect={false}
+                    titulo = "nome_avaliado"
+                    defaultValue={nome_avaliado}
+                    onChangeText={nome_avaliado => setAvaliado(nome_avaliado)}
+                  />
+                {/*
+                <Picker selectedValue={avaliado_id}
+                  onValueChange={(itemValue, itemIndex) => setAvaliado(itemValue)}>
+                    {avaliados.map(avaliado => (
+                      <Picker.Item
+                        key={avaliado.usuarioAvaliado.id}
+                        label={avaliado.usuarioAvaliado.nome_avaliado}
+                        value={avaliado.usuarioAvaliado.id}
+                      />
+                    ))}
+                </Picker>
+                */}    
 
-                    <Text style={styles.label}>Avaliador</Text>
-                    <TextInput
-                      style={styles.Input}
-                      placeholder="Selecione o avaliador"
-                      placeholderTextColor= "#999"
-                      autoCorrect={false}
-                      titulo = "avaliador_id"
-                      type="number"
-                      keyboardType = 'numeric'
-                      defaultValue={avaliador_id}
-                      onChangeText={avaliador_id => setAvaliador_id((avaliador_id))}
-                    />
-                      <Text style={styles.label}>Avaliados</Text>                     
-                      <TextInput
-                      style={styles.Input}
-                      placeholder="Selecione os avaliados"
-                      placeholderTextColor= "#999"
-                      autoCorrect={false} 
-                      titulo = "listaAvaliados"
-                      type="number"
-                      keyboardType = 'numeric'
-                      defaultValue={avaliado_id}
-                      onChangeText={avaliado_id => setListaAvaliados(avaliado_id)}
-                    />  
+                <Text style={styles.label}>Atividade</Text>
+                  <TextInput
+                    style={styles.Input}
+                    placeholder="Informe a atividade"
+                    placeholderTextColor= "#999"
+                    autoCorrect={false}
+                    titulo = "desc_atividade"
+                    defaultValue={desc_atividade}
+                    onChangeText={desc_atividade => setAtividade(desc_atividade)}
+                  />
+                
+                <Text style={styles.label}>Fato</Text>
+                  <TextInput
+                    style={styles.Input}
+                    placeholder="Informe o fato"
+                    placeholderTextColor= "#999"
+                    autoCorrect={false}
+                    titulo = "desc_fato"
+                    defaultValue={desc_fato}
+                    onChangeText={desc_fato => setFato(desc_fato)}
+                  />
 
-                      <Text style={styles.label}>Atividade</Text>                     
-                      <TextInput
-                      style={styles.Input}
-                      placeholder="Informe a atividade"
-                      placeholderTextColor= "#999"
-                      autoCorrect={false}  
-                      titulo = "desc_atividade"
-                      defaultValue={desc_atividade}
-                      onChangeText={desc_atividade => setAtividade(desc_atividade)}
-                    />  
-                      <Text style={styles.label}>Fato</Text>                     
-                      <TextInput
-                      style={styles.Input}
-                      placeholder="Informe o fato"
-                      placeholderTextColor= "#999"
-                      autoCorrect={false}  
-                      titulo = "desc_fato"
-                      defaultValue={desc_fato}
-                      onChangeText={desc_fato => setFato(desc_fato)}
+                <Text style={styles.label}>Providência</Text>
+                  <TextInput
+                    style={styles.Input}
+                    placeholder="Informe a Providência"
+                    placeholderTextColor= "#999"
+                    autoCorrect={false}
+                    titulo = "desc_providencia"
+                    defaultValue={desc_providencia}
+                    onChangeText={desc_providencia => setProvidencia(desc_providencia)}
+                  />
 
-                    />  
-                      <Text style={styles.label}>Providência</Text>                     
-                      <TextInput
-                      style={styles.Input}
-                      placeholder="Informe a Providência"
-                      placeholderTextColor= "#999"
-                      autoCorrect={false}  
-                      titulo = "desc_providencia"
-                      defaultValue={desc_providencia}
-                      onChangeText={desc_providencia => setProvidencia(desc_providencia)}
-                    />  
-                     
-                       <Text style={styles.label}>Conteúdos</Text>
-                      <TextInput
-                      style={styles.Input}
-                      placeholder="Selecione os Conteúdos"
-                      placeholderTextColor= "#999"
-                      autoCorrect={false} 
-                      titulo = "nome_conteudo"
-                      defaultValue={nome_conteudo}
-                      onChangeText={nome_conteudo => setConteudo(nome_conteudo)}
-                      
-                    />
+                <Text style={styles.label}>Conteúdos</Text>
+                <Picker selectedValue={conteudo_id}
+                  onValueChange={(itemValue, itemIndex) => {selecionarConteudo(itemValue)}}>
+                    {conteudos.map(conteudos => (
+                      <Picker.Item
+                        key={conteudos.id}
+                        label={conteudos.nome_conteudo}
+                        value={conteudos.id}
+                      />
+                    ))}
+                </Picker>
 
-                     <Text style={styles.label}>PAUTAS</Text>
-
-                      <Text style={styles.label}>Pauta</Text>                     
-                      <TextInput
-                      style={styles.Input}
-                      placeholder="Informe a pauta"
-                      placeholderTextColor= "#999"
-                      autoCorrect={false}  
-                      titulo = "desc_pauta"
-                      defaultValue={desc_pauta}
-                      onChangeText={desc_pauta => setPauta(desc_pauta)}  
-                    />       
+                <Text style={styles.label}>Pauta</Text>
+                <Picker selectedValue={pauta_id}
+                  onValueChange={(itemValue, itemIndex) =>  setPauta(itemValue)}>
+                    {pautas.map(pautas => (
+                      <Picker.Item
+                        key={pautas.id}
+                        label={pautas.desc_pauta}
+                        value={pautas.id}
+                      />
+                    ))}
+                </Picker>
 
                 <TouchableOpacity style={styles.button} onPress={cadastrar}>
                     <Text style={styles.buttonText}>Salvar</Text>
@@ -189,7 +188,11 @@ export default function CadastrarFatoObservado( { navigation }){
 }
 
 const styles = StyleSheet.create({
-    container: {
+  dateComponente:{
+    width: 370,
+  },  
+  
+  container: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
@@ -234,4 +237,3 @@ const styles = StyleSheet.create({
         fontSize: 16,
     }
 });
-

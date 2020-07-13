@@ -1,56 +1,53 @@
 import React, { useState, useEffect } from 'react';
-import { View, AsyncStorage, KeyboardAvoidingView, Platform, Image, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, AsyncStorage, Picker, Text, TextInput,
+    TouchableOpacity, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
 
 import api from '../../services/api';
 
-
-
-
 export default function ListarFatoAvaliado( { navigation }){
+    const [avaliado_id,setAvaliado] = useState('');
+    const [nome_avaliado,setNome] = useState('');
+    const [fatos, setFatos] = useState([]);
 
-    async function handleSubmit(){
-        
-
-        const { _id } = response.data;
-
-        await AsyncStorage.setItem('user', _id);
-
-        //ir para proxima tela
-       navigation.navigate('HomeAvaliador');
-        
+    async function exibir(){
+        api.get(`/curso/${avaliado_id}/avaliado/fo`).then(resp => {
+            setFatos(resp.data);
+        }).catch(() => console.log(`Error: ${console.error}`));
     }
 
     return(
         <View style={styles.container}>
             <Text style={styles.label}>LISTAR FATO</Text>
-
             <View style={styles.form}>
-                
-                <Text style={styles.label}>Selecione o fato observado </Text>
+                <Text style={styles.label}>Selecione o Avaliado</Text>
                 <TextInput
                     style={styles.Input}
-                    secureTextEntry={true} 
-                    placeholder="Fato 01"
+                    placeholder="Avaliado"
                     placeholderTextColor= "#999"
-                    autoCorrect={false}    
-                    //value={senha}     
-                    //onChangeText={setSenha}  
-                                      
-
+                    autoCorrect={false}
+                    type="number"
+                    keyboardType='numeric'
+                    defaultValue= {avaliado_id}
+                    onChangeText= {avaliado_id => setAvaliado(avaliado_id)}
+                    />
                     
-                    />    
+                <TouchableOpacity onPress={exibir} style={styles.button}>
+                    <Text style={styles.buttonText}>Exibir</Text>
+                </TouchableOpacity>
 
-                <TouchableOpacity onPress={handleSubmit} style={styles.button}>
-                    <Text style={styles.buttonText}>Alterar</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={handleSubmit} style={styles.button}>
-                    <Text style={styles.buttonText}>Cancelar</Text>
-                </TouchableOpacity>
-                
-                
+                <SafeAreaView>
+                    <ScrollView styles={styles.scrollView}>
+                        {fatos.map(fato => <Text>{'\nData: '}{fato.data_fato} {'Tipo: '}{fato.tipo_fato}{'\n'}
+                        {'Conteúdo Atitudinal: '} {fato.conteudoFato.nome_conteudo} {'\nPauta: '} {fato.pautaFato.desc_pauta}
+                        {'\nFato: '} {fato.fatoFato.desc_fato} {'\nAtividade: '} {fato.atividadeFato.desc_atividade}
+                        {'\nProvidência: '} {fato.providenciaFato.desc_providencia} {'\nAvaliador: '}
+                        {fato.avaliadorFato.usuarioAvaliador.nome_usuario}
+                        </Text>)}
+                    </ScrollView>
+                </SafeAreaView>
+
             </View>
         </View>
-
     );
 }
 
@@ -61,20 +58,22 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#fff'
     },
-
+    scrollView: {
+      backgroundColor: 'pink',
+      marginHorizontal: 20
+    },
     form: {
         alignSelf: 'stretch',
         paddingHorizontal: 30,
         marginTop: 50,
+        marginBottom: 270
     },
-
     label: {
         fontWeight: 'bold',
         color: '#444',
         marginBottom: 8,
         marginTop: 30
     },
-
     input: {
        borderWidth: 1,
        borderColor: '#ddd',
@@ -85,7 +84,6 @@ const styles = StyleSheet.create({
        marginBottom: 20,
        borderRadius: 2
     },
-
     button: {
         height: 42,
         backgroundColor: '#006400',
@@ -93,6 +91,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 2,
         marginTop: 30,
+        marginBottom: 5
     },
     buttonText: {
         color: '#fff',
@@ -100,4 +99,3 @@ const styles = StyleSheet.create({
         fontSize: 16,
     }
 });
-

@@ -1,42 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import { View, AsyncStorage, KeyboardAvoidingView, Platform, Image, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-
+import { View, AsyncStorage, Image, Text, StyleSheet } from 'react-native';
 import api from '../../services/api';
-
 import logo from '../../assets/logo.jpg';
 
-
 export default function HomeAvaliador( { navigation }){
- 
-
-
-    //Após logado direcionar diretamente para a próxima tela
-    /*
+    const [usuario_id,setIdUser] = useState('');
+    const [usuarioConec,setUsuario] = useState('');
+    
     useEffect(() => {
-        AsyncStorage.getItem('user').then(user => {
-            if(user){
-                navigation.navigate('List');
-            }
-        })
+        carregarUsuario();
     }, []);
-    
-*/
-    async function handleSubmit(){
-    
-        const { _id } = response.data;
 
-        await AsyncStorage.setItem('user', _id);
-
-        //ir para proxima tela
-       navigation.navigate('HomeAvaliador');
-        
+    async function carregarUsuario(){
+        try{
+            const usuario = await AsyncStorage.getItem('usuario');
+            setIdUser(JSON.parse(usuario).id);
+            await api.get(`usuarios/${usuario_id}`).then(resp => {
+                setUsuario(resp.data);
+            })
+        }catch(e){
+            alert(e)
+        }
     }
 
     return(
         <View style={styles.container}>
-            <Image source={logo} />      
+            <Image source={logo} />
+            <Text style={styles.label}>Bem vindo {usuarioConec.nome_usuario}!</Text>
         </View>
-
     );
 }
 
@@ -47,20 +38,17 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#fff'
     },
-
     form: {
         alignSelf: 'stretch',
         paddingHorizontal: 30,
         marginTop: 50,
     },
-
     label: {
         fontWeight: 'bold',
         color: '#444',
         marginBottom: 8,
-        marginTop: 30
+        marginTop: 10,
     },
-
     input: {
        borderWidth: 1,
        borderColor: '#ddd',
@@ -71,7 +59,6 @@ const styles = StyleSheet.create({
        marginBottom: 20,
        borderRadius: 2
     },
-
     button: {
         height: 42,
         backgroundColor: '#006400',
